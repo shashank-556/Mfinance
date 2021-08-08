@@ -11,14 +11,22 @@ Currently you can retrieve following data
 ___
 ### Quick Start
 Clone this repo and write your own scripts in your local repo
+###### comp
+The comp is the main class of mc module. Data of any entity can be retrieved using this class.</br>
+The comp class accepts one argument. The *symbol* of the company,index,etf etc. The symbol of any entity can be found in its url on moneycontrol.<br>
+<br>Symbol of Reliance Industries Ltd. is RI
+![Symbol of Reliance](image/relurl.png)
 
+Symbol of Asian Paints is AP31
+![Symbol of Asian Paints](image/aiurl.png)
 ```python
 import mcontrol as mc
 
 
-#the comp module
-#the comp module currently accepts url as argument but soon it will be changed to company name
-ril = mc.comp('https://www.moneycontrol.com/india/stockpricequote/refineries/relianceindustries/RI')
+#the comp module will return all the data about the company
+#the comp module accepts the company symbol as argument
+
+ril = mc.comp('RI')
 
 # about the company
 print(ril.about)
@@ -26,8 +34,11 @@ print(ril.about)
 # a dictionary listing basic details like closing price, market cap, pe etc
 print(ril.info)
 ```
+Output of above program will be
+![output](image/output.png)
+
 ___
 
 ### Requirements
-requests</br>
+lxml</br>
 beautifulsoup4

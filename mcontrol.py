@@ -1,14 +1,28 @@
 import requests
 from bs4 import BeautifulSoup
+import lxml
+import json
+
+
+def convert_symbol_to_url(symbol) :
+    with open('symbolurl.json','r') as fh :
+        di = json.load(fh)
+        try :
+            return di[symbol]
+        except KeyError:
+            print("Given symbol doesn't exist. Please check and enter the correct symbol\nIn case the symbol is correct then run the allsymbol_to_url.py script to update the list of symbols\nIf the error still occurs then please report the issue on Github page with the symbol")
+            quit()
 
 
 class comp :
 
+    base_url = 'https://www.moneycontrol.com/india/stockpricequote/'
+
     #all the methods below call methods below upto #####...#####, they create attributes(sp(soupobject),url,about,basic(dictionary))
 
 
-    def __init__(self,url) :  # initialise the instance with url, chage: initialisation with company name
-        self.url = url
+    def __init__(self,symbol) :  # initialise the instance with symbol, chage: initialisation with company name
+        self.url = comp.base_url+convert_symbol_to_url(symbol)
         self.spobj()          #call method to create soup object
 
     def spobj(self) :
@@ -16,7 +30,7 @@ class comp :
 
         #rs = open('temp.html','r').read()  # reading html from a file to avoid wasting time change line 15,19 later
 
-        self.sp = BeautifulSoup(rs.content,'html.parser')  #soup object is stored in sp attribute
+        self.sp = BeautifulSoup(rs.content,'lxml')  #soup object is stored in sp attribute
         self.updt()      # to store about & basic-stuff in attributes
 
     def updt(self) :
@@ -68,6 +82,6 @@ class comp :
 
 
 
-#cr = crawler('https://www.moneycontrol.com/india/stockpricequote/miscellaneous/cochinshipyard/CS')
-#print(cr.about)
-#print(cr.info)
+#cs = comp('RI')
+#print(cs.about)
+#print(cs.info)
