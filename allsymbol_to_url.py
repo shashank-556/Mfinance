@@ -1,6 +1,6 @@
 
 # This script will update the symbol to url dictionary i.e. the symbolurl.json file, run this in
-# case you find new companies,etf etc whose data you are unable to retrieve through the mcontrol moudule
+# case you find new companies,etf etc whose data you are unable to retrieve through the mcontrol module
 
 import requests
 from bs4 import BeautifulSoup   #lxml and soup for parsing the pages
@@ -21,7 +21,7 @@ for i in range(27) :
 
     if i == 0:      # others is for symbols whose name does't start with a character
         startchar = 'others'
-        print('Updating companies, etf, indices etc. whose name starts with numbers ...')
+        print('Updating companies, etf, indices etc. whose name starts with a number ...')
     else :
         startchar = chr(64 + i)
         print('Updating companies, etf, indices etc. whose name starts with',startchar,'...')
