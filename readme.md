@@ -13,12 +13,14 @@ ___
 Clone this repo and write your own scripts in your local repo
 ###### comp
 The comp is the main class of mc module. Data of any entity can be retrieved using this class.</br>
-The comp class accepts one argument. The *symbol* of the company,index,etf etc. The symbol of any entity can be found in its url on moneycontrol.<br>
+The comp class accepts one argument. The *symbol* of the company,index,etf etc. The symbol of any entity can be found in its url on moneycontrol.<br><br>
 <br>Symbol of Reliance Industries Ltd. is RI
 ![Symbol of Reliance](image/relurl.png)
-
 Symbol of Asian Paints is AP31
 ![Symbol of Asian Paints](image/aiurl.png)
+
+<br>
+
 ```python
 import mcontrol as mc
 
@@ -34,7 +36,7 @@ print(ril.about)
 # a dictionary listing basic details like closing price, market cap, pe etc
 print(ril.info)
 ```
-Output of above program will be
+</br>Output of above program will be
 ![output](image/output.png)
 
 ___
