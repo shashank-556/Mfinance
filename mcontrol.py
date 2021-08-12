@@ -34,6 +34,8 @@ class comp :
         self.updt()      # to store about & basic-stuff in attributes
 
     def updt(self) :
+        # scrape latest price
+        self.latestPrice = float(self.sp.find(id = 'nsecp').text.replace(',',''))
         self.up_about() # to update company about
         self.basic_details() # to update basic details like pe,price in a dictionary
 
@@ -85,3 +87,4 @@ class comp :
 #cs = comp('RI')
 #print(cs.about)
 #print(cs.info)
+#print(cs.latestPrice)
