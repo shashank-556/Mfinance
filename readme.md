@@ -8,6 +8,7 @@ A python module that helps you retrieve financial data of public Indian companie
 Currently you can retrieve following data
 1. Small summary about the business of the company
 2. Basic data about the company like Share Price, Market Cap, PE etc.
+3. Latest share price
 ___
 ### Quick Start
 Clone this repo and write your own scripts in your local repo
