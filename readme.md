@@ -35,9 +35,10 @@ print(ril.about)
 
 # a dictionary listing basic details like closing price, market cap, pe etc
 print(ril.info)
+
+# to get the latest price
+print(ril.latestPrice)
 ```
-</br>Output of above program will be
-![output](image/output.png)
 
 ___
 
