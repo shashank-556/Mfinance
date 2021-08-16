@@ -1,14 +1,15 @@
 # Moneycontrol Data Scraper
 
-*The project is still in development phase*
 
-A python module that helps you retrieve financial data of public Indian companies listed on the National Stock Exchange and the Bombay Stock Exchange from the popular website [Moneycontrol](https://www.moneycontrol.com/)</br>
+A python module that allows you to access the financial data of public Indian companies listed on the National Stock Exchange and the Bombay Stock Exchange from the popular website [Moneycontrol](https://www.moneycontrol.com/) in a pythonic way.</br>
 *This is not an official Moneycontrol python library or api*
 
 Currently you can retrieve following data
 1. Small summary about the business of the company
 2. Basic data about the company like Share Price, Market Cap, PE etc.
 3. Latest share price
+4. Basic info about the peers of the company
+5. Financial ratios and per share data of the company
 ___
 ### Quick Start
 Clone this repo and write your own scripts in your local repo
@@ -39,6 +40,15 @@ print(ril.info)
 
 # to get the latest price
 print(ril.latestPrice)
+
+# returns a list of dictionary containing info about the peers of the company
+print(ril.peers())
+
+# returns a dictionary with basic per share data like eps, bvps and financial ratios
+print(ril.pershare())
+
+# url of the company on moneycontrol
+print(ril.url)
 ```
 
 ___

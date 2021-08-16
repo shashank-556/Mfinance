@@ -140,9 +140,8 @@ if __name__ == '__main__':
     import sys
     a = sys.argv[1]
     c = comp(a)
-    #print(c.info)
-    #print(c.about)
-    #print(c.latestPrice)
-    #print(c.peers())
+    print(c.info)
+    print(c.about)
+    print(c.latestPrice)
+    print(c.peers())
     print(c.pershare())
-    #print(dir(c))
