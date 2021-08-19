@@ -15,7 +15,7 @@ ___
 Clone this repo and write your own scripts in your local repo
 ###### comp
 The comp is the main class of mc module. Data of any entity can be retrieved using this class.</br>
-The comp class accepts one argument. The *symbol* of the company,index,etf etc. The symbol of any entity can be found in its url on moneycontrol.<br><br>
+The comp class accepts one argument. The *symbol* of the company, etf etc. The symbol of any entity can be found in its url on moneycontrol.<br><br>
 <br>Symbol of Reliance Industries Ltd. is RI
 ![Symbol of Reliance](image/relurl.png)
 Symbol of Asian Paints is AP31
