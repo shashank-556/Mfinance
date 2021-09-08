@@ -10,7 +10,7 @@ def convert_symbol_to_url(symbol) :
         try :
             return di[symbol]
         except KeyError:
-            print("Given symbol doesn't exist. Please check and enter the correct symbol\nIn case the symbol is correct then run the allsymbol_to_url.py script to update the list of symbols\nIf the error still occurs then please report the issue on Github page with the symbol")
+            print("Error! given symbol doesn't exist. Please check and enter the correct symbol\nIn case the symbol is correct then run the allsymbol_to_url.py script to update the list of symbols\nIf the error still occurs then please report the issue on Github page")
             quit()
 
 
@@ -23,7 +23,7 @@ class comp :
     def __init__(self,symbol) :  # initialise the instance with symbol, chage: initialisation with company name
         self.url = comp.base_url+convert_symbol_to_url(symbol)
         #call method to create soup object
-        rs = requests.get(self.url)
+        rs = requests.get(self.url,timeout=5)
 
         #rs = open('temp.html','r').read()  # reading html from a file to avoid wasting time change line 15,19 later
         self.sp = BeautifulSoup(rs.content,'lxml')  #soup object is stored in sp attribute
@@ -101,7 +101,6 @@ class comp :
 
                 cntr+=1
 
-            # use dict.copy() to as only dict insert the same dictionary for all indices
             peers_list.append(temp_dict.copy())
 
         return peers_list
