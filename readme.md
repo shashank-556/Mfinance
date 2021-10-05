@@ -10,6 +10,7 @@ Currently you can retrieve following data
 3. Latest share price
 4. Basic info about the peers of the company
 5. Financial ratios and per share data of the company
+6. Latest shareholding pattern
 ___
 ### Quick Start
 Clone this repo and write your own scripts in your local repo
@@ -46,6 +47,9 @@ print(ril.peers())
 
 # returns a dictionary with basic per share data like eps, bvps and financial ratios
 print(ril.pershare())
+
+# returns a dictionary with latest shareholding data
+print(ril.latestShareholding())
 
 # url of the company on moneycontrol
 print(ril.url)
