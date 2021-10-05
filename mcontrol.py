@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import lxml
 import json
+import re
 
 
 def convert_symbol_to_url(symbol) :
@@ -138,45 +139,40 @@ class comp :
         """
         Returns a dictionary of latest shareholding trend of company
         """
-        all_scripts_in_sp = self.sp.find_all("script")
         trend_text_to_look_for = "var summary_jsn = '"
-        trends = [t for t in all_scripts_in_sp if trend_text_to_look_for in t.text]
+        
+        trend = None
+        for t in self.sp.find_all("script"):
+            if t.string is not None and trend_text_to_look_for in t.string:
+                trend = t
 
         default_return_dict = {
-                "Promoter": "",
-                "FII": "", 
-                "DII": "",
-                "Public": "",
-                "Others": ""
-            }
+            "Promoter": "",
+            "FII": "", 
+            "DII": "",
+            "Public": "",
+            "Others": ""
+        }
 
-        if len(trends) == 0:
+        if trend is None:
             return default_return_dict
 
-        trend = trends[0].text
-        start_index = trend.find(trend_text_to_look_for)
+        trend = trend.text
+        regex_pattern = trend_text_to_look_for + "(.*)';"
+        match = re.search(regex_pattern, trend)
 
-        if start_index is None:
+        if not match:
             return default_return_dict
 
-        trend = trend[start_index + len(trend_text_to_look_for):]
-        
-        end_text_to_look_for = "';\n"
-        end_index = trend.find(end_text_to_look_for)
-
-        if end_index is None:
-            return default_return_dict
-
-        trend = trend[:end_index]
+        trend_summary = match.groups()[0]
 
         try:
-            trend_dict = json.loads(trend.strip())
+            trend_dict = json.loads(trend_summary)
         except json.decoder.JSONDecodeError as e:
             print(e)
             return default_return_dict
 
         return trend_dict
-
 
 
 if __name__ == '__main__':
