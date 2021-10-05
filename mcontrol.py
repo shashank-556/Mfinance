@@ -157,7 +157,7 @@ class comp :
         if trend is None:
             return default_return_dict
 
-        trend = trend.text
+        trend = trend.string
         regex_pattern = trend_text_to_look_for + "(.*)';"
         match = re.search(regex_pattern, trend)
 
