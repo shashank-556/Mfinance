@@ -134,6 +134,50 @@ class comp :
         return temp_dict
 
 
+    def latest_shareholder_trend(self):
+        """
+        Returns a dictionary of latest shareholding trend of company
+        """
+        all_scripts_in_sp = self.sp.find_all("script")
+        trend_text_to_look_for = "var summary_jsn = '"
+        trends = [t for t in all_scripts_in_sp if trend_text_to_look_for in t.text]
+
+        default_return_dict = {
+                "Promoter": "",
+                "FII": "", 
+                "DII": "",
+                "Public": "",
+                "Others": ""
+            }
+
+        if len(trends) == 0:
+            return default_return_dict
+
+        trend = trends[0].text
+        start_index = trend.find(trend_text_to_look_for)
+
+        if start_index is None:
+            return default_return_dict
+
+        trend = trend[start_index + len(trend_text_to_look_for):]
+        
+        end_text_to_look_for = "';\n"
+        end_index = trend.find(end_text_to_look_for)
+
+        if end_index is None:
+            return default_return_dict
+
+        trend = trend[:end_index]
+
+        try:
+            trend_dict = json.loads(trend.strip())
+        except json.decoder.JSONDecodeError as e:
+            print(e)
+            return default_return_dict
+
+        return trend_dict
+
+
 
 if __name__ == '__main__':
     import sys
@@ -144,3 +188,4 @@ if __name__ == '__main__':
     print(c.latestPrice)
     print(c.peers())
     print(c.pershare())
+    print(c.latest_shareholder_trend())
