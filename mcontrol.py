@@ -2,6 +2,7 @@ import requests
 from bs4 import BeautifulSoup
 import lxml
 import json
+import re
 
 
 def convert_symbol_to_url(symbol) :
@@ -134,6 +135,45 @@ class comp :
         return temp_dict
 
 
+    def latest_shareholder_trend(self):
+        """
+        Returns a dictionary of latest shareholding trend of company
+        """
+        trend_text_to_look_for = "var summary_jsn = '"
+        
+        trend = None
+        for t in self.sp.find_all("script"):
+            if t.string is not None and trend_text_to_look_for in t.string:
+                trend = t
+
+        default_return_dict = {
+            "Promoter": "",
+            "FII": "", 
+            "DII": "",
+            "Public": "",
+            "Others": ""
+        }
+
+        if trend is None:
+            return default_return_dict
+
+        trend = trend.string
+        regex_pattern = trend_text_to_look_for + "(.*)';"
+        match = re.search(regex_pattern, trend)
+
+        if not match:
+            return default_return_dict
+
+        trend_summary = match.groups()[0]
+
+        try:
+            trend_dict = json.loads(trend_summary)
+        except json.decoder.JSONDecodeError as e:
+            print(e)
+            return default_return_dict
+
+        return trend_dict
+
 
 if __name__ == '__main__':
     import sys
@@ -144,3 +184,4 @@ if __name__ == '__main__':
     print(c.latestPrice)
     print(c.peers())
     print(c.pershare())
+    print(c.latest_shareholder_trend())
