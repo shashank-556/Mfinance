@@ -3,6 +3,7 @@ from bs4 import BeautifulSoup
 import lxml
 import json
 import re
+import pandas as pd
 
 
 def convert_symbol_to_url(symbol):
@@ -19,7 +20,7 @@ class comp:
 
     base_url = 'https://www.moneycontrol.com/india/stockpricequote/'
 
-    # initialise the instance with symbol, chage: initialisation with company name
+    # initialise the instance with symbol, change: initialisation with company name
     def __init__(self, symbol):
         self.url = comp.base_url+convert_symbol_to_url(symbol)
         # call method to create soup object
@@ -72,12 +73,12 @@ class comp:
         # peer data is stored in a table
         self.__peer = self.sp.find('div', {'id': 'peers'}).table.find_all('tr')
 
-    def peers(self):
+    def peers(self, dframe=False):
         """
         Returns all about the peers in a list of dictionaries
         """
 
-        #temp = self.sp.find('div',{'id':'peers'}).table.find_all('tr')
+        # temp = self.sp.find('div',{'id':'peers'}).table.find_all('tr')
         # the final list
         peers_list = []
         # list to initialise the dictionary
@@ -110,6 +111,11 @@ class comp:
                 cntr += 1
 
             peers_list.append(temp_dict.copy())
+
+        if dframe == True:
+            temp_df = pd.DataFrame(peers_list)
+            temp_df.set_index('symbol', inplace=True)
+            return temp_df
 
         return peers_list
 
@@ -196,3 +202,4 @@ if __name__ == '__main__':
     print(c.peers())
     print(c.pershare())
     print(c.latestShareholding())
+    print(c.peers(dframe=True))

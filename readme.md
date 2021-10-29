@@ -45,6 +45,11 @@ print(ril.latestPrice)
 # returns a list of dictionary containing info about the peers of the company
 print(ril.peers())
 
+# to get the peers result as pandas dataframe
+print(ril.peers(dframe=True))
+# or
+print(ril.peers(True)) 
+
 # returns a dictionary with basic per share data like eps, bvps and financial ratios
 print(ril.pershare())
 
