@@ -1,3 +1,5 @@
+import sys
+import traceback
 import requests
 from bs4 import BeautifulSoup
 import lxml
@@ -7,12 +9,16 @@ import pandas as pd
 
 
 def convert_symbol_to_url(symbol):
+    """
+    Converts the given company symbol to its corresponding url on moneycontrol
+    """
     with open('symbolurl.json', 'r') as fh:
         di = json.load(fh)
         try:
             return di[symbol]
-        except KeyError:
-            print("Error! given symbol doesn't exist. Please check and enter the correct symbol\nIn case the symbol is correct then run the allsymbol_to_url.py script to update the list of symbols\nIf the error still occurs then please report the issue on Github page")
+        except KeyError as e:
+            traceback.print_exc()
+            print("!!!Given symbol doesn't exist. Please check and enter the correct symbol\nIn case the symbol is correct then run the allsymbol_to_url.py script to update the list of symbols\nIf the error still occurs then please report the issue on Github page!!!")
             quit()
 
 
@@ -20,14 +26,12 @@ class comp:
 
     base_url = 'https://www.moneycontrol.com/india/stockpricequote/'
 
-    # initialise the instance with symbol, change: initialisation with company name
     def __init__(self, symbol):
-        self.url = comp.base_url+convert_symbol_to_url(symbol)
-        # call method to create soup object
+        self.symbol = symbol
+        self.url = comp.base_url+convert_symbol_to_url(self.symbol)
+
         rs = requests.get(self.url, timeout=5)
 
-        # rs = open('temp.html','r').read()  # reading html from a file to avoid wasting time change line 15,19 later
-        # soup object is stored in sp attribute
         self.sp = BeautifulSoup(rs.content, 'lxml')
 
         # scrape latest price
@@ -39,7 +43,6 @@ class comp:
             'div', {'class': 'com_overviewcnt'}).text.strip()
 
         # to update basic details like pe,price in a dictionary
-        # create a dictionary with these keys
         # key_list contains all the ids of info dictionary
         key_list = ['open', 'previousClose', 'volume', 'valueInLakhs', 'VWAP', 'beta',
                     'high', 'low', 'upperCircuitLimit', 'lowerCircuitLimit', '52weekHigh', '52weekLow', 'eps',
@@ -48,7 +51,7 @@ class comp:
 
         self.info = dict.fromkeys(key_list)
 
-        counter = 0  # just variable like i to update the dictionary by keepin track of ids
+        counter = 0
 
         # the overview data is stored in multiple classes
         ovtablelist = self.sp.find('div', {'id': 'stk_overview'}).find_all(
@@ -64,8 +67,8 @@ class comp:
                 # being stored as string only
                 try:
                     self.info[key_list[counter]] = float(li[a].text.replace(
-                        ',', ''))  # replace to remove all ',' in numbers
-                except:                                                              # so they can be converted to float
+                        ',', ''))
+                except ValueError:
                     self.info[key_list[counter]] = li[a].text.replace(',', '')
 
                 counter += 1
@@ -81,7 +84,7 @@ class comp:
         # temp = self.sp.find('div',{'id':'peers'}).table.find_all('tr')
         # the final list
         peers_list = []
-        # list to initialise the dictionary
+
         temp_list = ['name', 'symbol', 'price', 'change%', 'marketCap', 'pe',
                      'pb', 'roe%', '1yrPerformance%', 'netProfit', 'netSales', 'debtToEquity']
         # dictionary to store data of single company with its keys as temp_list
@@ -100,7 +103,7 @@ class comp:
                 try:
                     temp_dict[temp_list[cntr]] = float(
                         a.string.strip().replace(',', ''))
-                except:
+                except ValueError:
                     temp_dict[temp_list[cntr]] = a.string.strip()
 
                 # symbol is not part of html table to insert it on your own after name
@@ -141,13 +144,13 @@ class comp:
         try:
             temp_dict['debtToEquity'] = float(
                 self.__peer[1].find_all('td')[10].string)
-        except:
+        except ValueError:
             temp_dict['debtToEquity'] = self.__peer[1].find_all('td')[
                 10].string
 
         try:
             temp_dict['roe%'] = float(self.__peer[1].find_all('td')[6].string)
-        except:
+        except ValueError:
             temp_dict['roe%'] = self.__peer[1].find_all('td')[6].string
 
         return temp_dict
@@ -191,11 +194,14 @@ class comp:
 
         return trend_dict
 
+    def __repr__(self):
+        return f"comp('{self.symbol}')"
+
 
 if __name__ == '__main__':
-    import sys
     a = sys.argv[1]
     c = comp(a)
+    print(c)
     print(c.info)
     print(c.about)
     print(c.latestPrice)
